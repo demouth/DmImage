@@ -1,55 +1,59 @@
 <?php
 /**
- * DmColor
+ * Dm_Color
  * 色を表すクラス。
  * RGB・HSV変換できます。
  * 
  * @example
  * Example 1:
  * //RGBを10進数で個別に設定する。
- * $color = new DmColor();
+ * $color = new Dm_Color();
  * $color->r(255)->g(100)->b(50);
  * echo $color->g; // 100
  * 
  * Example 2:
  * //RGBを16進数で設定する。
- * $color = DmColor::rgb(0xFF0066);
+ * $color = Dm_Color::rgb(0xFF0066);
  * echo $color->r; // 255
  * 
  * Example 3:
  * //HSV色空間で色を設定する。
- * $color = DmColor::hsv(100, 0.5, 0.2);
+ * $color = Dm_Color::hsv(100, 0.5, 0.2);
  * echo $color->s; // 0.5
  * echo $color->hsv; // 'hsv(100, 0.5,0.2)'
  * 
  * Example4
  * //RGBを16進数で設定し、16進数で値を取得する。
- * $color = DmColor::rgb(0xFF0099);
+ * $color = Dm_Color::rgb(0xFF0099);
  * echo $color->rgb; // 'ff0099'
  * 
  * Example5
  * //RGBを10進数で設定し、HSVで値を取得する。
- * $color = DmColor::rgb(255,10,60);
+ * $color = Dm_Color::rgb(255,10,60);
  * echo $color->rgb; // 'ff0a3c'
  * echo $color->hsv; // 'hsv(347.76, 0.96,1)'
  * 
  * Example6
  * //RGBを10進数で個別に設定し、明度を80%に下げた色を16進数で取得する。
- * $color = DmColor::rgb(155,200,60);
+ * $color = Dm_Color::rgb(155,200,60);
  * $color2->v = $color2->v * 0.8;
  * echo $color->rgb; // '7ba02f'
  * 
  * Example7
  * //Alphaを使う
- * $color = DmColor::argb(0.5, 155, 200, 60);
- * $color = DmColor::ahsv(0.5, 300.5, 200, 60);
+ * $color = Dm_Color::argb(0.5, 155, 200, 60);
+ * $color = Dm_Color::ahsv(0.5, 300.5, 200, 60);
  * echo $color->a; // 0.5
  * echo $color->argb; // '7fffc83c'
  * 
- * @version 1.1.0
+ * Example7
+ * //16進数に変換する
+ * $color = Dm_Color::argb(0.5, 155, 200, 60);
+ * $color = $color->toInt();
+ * 
  * @author demouth.net
  */
-class DmColor
+class Dm_Color
 {
 	
 	/**
@@ -273,6 +277,20 @@ class DmColor
 	{
 		$self = self::hsv($h,$s,$v);
 		return $self->a($a);
+	}
+	
+	/**
+	 * 
+	 * @return int
+	 */
+	public function toInt()
+	{
+		$int = 
+			((int)($this->_a*255) << 24) |
+			$this->_r << 16 |
+			$this->_g << 8  |
+			$this->_b;
+		return $int;
 	}
 	
 	/**

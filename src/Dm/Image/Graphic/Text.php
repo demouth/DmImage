@@ -1,10 +1,6 @@
 <?php
-
-require_once realpath(dirname(__FILE__).'/../../DmColor/').'/DmColor.php';
-require_once dirname(__FILE__).'/IDmGraphics.php';
-
 /**
- * DmGraphics
+ * Dm_Image_Graphic_Text
  * 画像への図形描画等を行う。
  * 
  * @example
@@ -20,7 +16,7 @@ require_once dirname(__FILE__).'/IDmGraphics.php';
  * 
  * @author demouth.net
  */
-class DmTextGraphics implements IDmGraphics
+class Dm_Image_Graphic_Text implements Dm_Image_Graphic_Interface
 {
 	
 	/**
@@ -94,7 +90,7 @@ class DmTextGraphics implements IDmGraphics
 	 * テキストスタイルを決定する。
 	 * @param int latin2 エンコーディングの組み込みのフォントの場合は 1, 2, 3, 4, 5 のいずれか (数字が大きなほうが、より大きいフォントに対応します)、 あるいは imageloadfont() で登録したフォントの識別子のいずれか。
 	 * @param int 線色 例:0x00FF99
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Text
 	 */
 	public function setFontSize($size)
 	{
@@ -102,12 +98,20 @@ class DmTextGraphics implements IDmGraphics
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Dm_Image_Graphic_Text
+	 */
 	public function setColor($color=0xFF000000)
 	{
 		$this->_fontColor = $color;
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Dm_Image_Graphic_Text
+	 */
 	public function setFontFile($fontPath)
 	{
 		$this->_fontPath = $fontPath;
@@ -119,7 +123,7 @@ class DmTextGraphics implements IDmGraphics
 	 * @param int X軸(px)
 	 * @param int Y軸(px)
 	 * @param string 文字列
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Text
 	 */
 	public function textTo($x,$y,$text,$angle=0)
 	{
@@ -129,7 +133,7 @@ class DmTextGraphics implements IDmGraphics
 			$angle,//angle
 			$x ,
 			$y ,
-			DmColor::argb($this->_fontColor)->imagecolorallocatealpha($this->_imageResource),
+			Dm_Color::argb($this->_fontColor)->imagecolorallocatealpha($this->_imageResource),
 			$this->_fontPath,
 			$text
 		);

@@ -1,27 +1,49 @@
 <?php
-
-require_once realpath(dirname(__FILE__).'/../DmColor/').'/DmColor.php';
-require_once dirname(__FILE__).'/Graphics/DmGraphics.php';
-require_once dirname(__FILE__).'/Graphics/DmTextGraphics.php';
-
 /**
- * DmImage
+ * Dm_Image
  * 画像を表すクラス。
  * 
  * @example
+ * Example 1:
+ * $image = new Dm_Image(400,300, 0xFF0099FF);
+ * $image->display();
  * 
- * @version 1.1.0
+ * Example 2:
+ * $image = new Dm_Image(400,300, 0xFF0099FF);
+ * $image->graphics
+ * 	->lineStyle(1,0xFFFFFFFF)
+ * 	->fillStyle(0)
+ * 	->drawRect(10, 10, 190, 140)
+ * 	->drawCircle(100, 225, 50)
+ * 	->drawEllipse(300, 75, 150, 100)
+ * 	->drawPie(300, 225, 150, 100, 0, 135);
+ * $image->display();
+ * 
+ * Example 2:
+ * $image = new Dm_Image(400,300, 0xFF0099FF);
+ * $image->textGraphics
+ * 	->setColor(0xFFFFFFFF)
+ * 	->setFontSize(30)
+ * 	->textTo(100, 100, 'Hello world.');
+ * $image->display();
+ * 
+ * Example 2:
+ * $image = new Dm_Image_File('/path/to/image/image.jpg');
+ * $filter = new Dm_Image_Filter_InstagramLoFi(300,1);
+ + $image->applyFilter($filter);
+ * $image->display();
+ * 
  * @author demouth.net
  */
-class DmImage
+class Dm_Image
 {
 	
 	/**
-	 * @var DmGraphics
+	 * @var Dm_Image_Graphic_Shape
 	 */
 	public $graphics;
 	/**
-	 * @var DmTextGraphics
+	 * @var Dm_Image_Graphic_Text
 	 */
 	public $textGraphics;
 	
@@ -57,8 +79,8 @@ class DmImage
 		
 		$imageResource = imagecreatetruecolor($width, $height);
 		
-		$this->graphics = new DmGraphics($imageResource , $width , $height);
-		$this->textGraphics = new DmTextGraphics($imageResource , $width , $height);
+		$this->graphics = new Dm_Image_Graphic_Shape($imageResource , $width , $height);
+		$this->textGraphics = new Dm_Image_Graphic_Text($imageResource , $width , $height);
 		$this->_imageResource = $imageResource;
 		$this->_width = $width;
 		$this->_height = $height;
@@ -66,7 +88,7 @@ class DmImage
 		//背景色設定(透過を有効化)
 		imagesavealpha($imageResource,true);
 //		imagealphablending($imageResource, false);
-		$colorId = DmColor::argb($backgroundColor)->imagecolorallocatealpha($imageResource);
+		$colorId = Dm_Color::argb($backgroundColor)->imagecolorallocatealpha($imageResource);
 //		imagefilledrectangle($imageResource, 0, 0, $width-1, $height-1, $colorId);
 		imagefill($imageResource, 0, 0, $colorId);
 	}
@@ -109,12 +131,11 @@ class DmImage
 	/**
 	 * Output a PNG image to either the browser.
 	 * The raw image stream will be outputted directly.
-	 * @return void
+	 * @return bool
 	 */
-	public function display()
+	public function display($type='png', $quality=null)
 	{
-		header('Content-type: image/png');
-		imagepng($this->_imageResource , null , 5 );
+		return $this->outputTo(null, $type, $quality);
 	}
 	
 	/**
@@ -126,7 +147,7 @@ class DmImage
 	 * @param int Source height.
 	 * @return bool Returns TRUE on success or FALSE on failure.
 	 */
-	public function draw(DmImage $image,$x=0,$y=0,$width=null,$height=null)
+	public function draw(Dm_Image $image,$x=0,$y=0,$width=null,$height=null)
 	{
 		$srcImageResource = $image->getImageResource();
 		if (is_null($width))  $width = $image->getWidth();
@@ -152,18 +173,47 @@ class DmImage
 	public function saveTo($path , $type='png', $quality=null)
 	{
 		if (!$path) return false;
+		return $this->outputTo($path, $type, $quality);
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * @return 
+	 */
+	public function startDownload($filename='image', $type='png', $quality=null)
+	{
+		header('Content-Type: application/octet-stream');
+		header('Content-disposition: attachment; filename="'.$filename.'.'.$type.'"');
+		return $this->outputTo(null, $type, $quality);
+	}
+	
+	
+	/**
+	 * 画像をブラウザあるいはファイルに出力する。
+	 * $pathがNULLならブラウザ出力する。
+	 * @param string or null nullならブラウザ出力する
+	 * @param string filetype 'png' 'jpg' 'jpeg' 'gif'
+	 * @return bool
+	 */
+	protected function outputTo($path , $type='png', $quality=null)
+	{
 		switch ($type) {
 			case 'jpg':
 			case 'jpeg':
 				if (is_null($quality)) $quality = 75;
+				if (is_null($path)) header('Content-Type: image/jpeg');
 				imagejpeg($this->_imageResource , $path , $quality );
 				break;
 			case 'gif':
+				if (is_null($path)) header('Content-Type: image/gif');
 				imagegif($this->_imageResource , $path );
 				break;
 			case 'png':
 			default:
 				if (is_null($quality)) $quality = 5;
+				if (is_null($path)) header('Content-Type: image/png');
 				imagepng($this->_imageResource , $path , $quality );
 				break;
 		}
@@ -205,7 +255,7 @@ class DmImage
 	protected function tempDirPath()
 	{
 		if($this->_tempDirPath===""){
-			return dirname(__FILE__).DIRECTORY_SEPARATOR.'temp';
+			return dirname(__FILE__).DIRECTORY_SEPARATOR.'Image'.DIRECTORY_SEPARATOR.'temp';
 		}else{
 			return $this->_tempDirPath;
 		}

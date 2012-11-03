@@ -1,10 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/DmImageFilter.php';
-require_once dirname(__FILE__).'/DmImageFitFilter.php';
-require_once dirname(__FILE__).'/DmImageCropFilter.php';
-
-class DmImageInstagramNormalFilter extends DmImageFilter
+abstract class Dm_Image_Filter_InstagramNormal extends Dm_Image_Filter_Abstract
 {
 	
 	public $width = 0;
@@ -13,6 +9,11 @@ class DmImageInstagramNormalFilter extends DmImageFilter
 	
 	public $fram;
 	
+	/**
+	 * 
+	 * @param int 画像サイズピクセル数
+	 * @param int フレーム番号 0-3
+	 */
 	public function __construct($size, $frame=3)
 	{
 		$this->width  = $size;
@@ -20,19 +21,19 @@ class DmImageInstagramNormalFilter extends DmImageFilter
 		$this->fram   = $frame;
 	}
 	
-	public function execute(DmImage $image)
+	public function execute(Dm_Image $image)
 	{
 		$w = $this->width;
 		$h = $this->height;
 		$f = (int)$this->fram;
-		$fit = new DmImageFitFilter($w,$h,true);
-		$crop = new DmImageCropFilter($w,$h);
+		$fit = new Dm_Image_Filter_Fit($w,$h,true);
+		$crop = new Dm_Image_Filter_Crop($w,$h);
 		$filters = array($fit,$crop);
 		$image->applyFilters($filters);
 		
 		
 		
-		$effectImage = new DmImageFile( dirname(__FILE__).'/img/instagram_effect_01.png');
+		$effectImage = new Dm_Image_File( dirname(__FILE__).'/img/instagram_effect_01.png');
 		$effectImage->applyFilters($filters);
 		$image->draw($effectImage,0,0,$effectImage->getWidth(),$effectImage->getHeight());
 		
@@ -41,7 +42,7 @@ class DmImageInstagramNormalFilter extends DmImageFilter
 		
 		
 		if($f===1 || $f===2 || $f===3){
-			$frameImage = new DmImageFile( dirname(__FILE__).'/img/frame_'.str_pad($f,2,'0',STR_PAD_LEFT).'.png');
+			$frameImage = new Dm_Image_File( dirname(__FILE__).'/img/frame_'.str_pad($f,2,'0',STR_PAD_LEFT).'.png');
 			$frameImage->applyFilters($filters);
 			$image->draw($frameImage,0,0,$frameImage->getWidth(),$frameImage->getHeight());
 		}
@@ -51,9 +52,5 @@ class DmImageInstagramNormalFilter extends DmImageFilter
 		
 	}
 	
-	public function effect($resource)
-	{
-		
-	}
-	
+	abstract public function effect($resource);
 }

@@ -1,17 +1,17 @@
 <?php
-
-require_once dirname(__FILE__).'/DmImage.php';
-
 /**
- * DmImageLoader
+ * Dm_Image_File
  * 画像を表すクラス。
  * 
  * @example
+ * $image = new Dm_Image_File('/path/to/image/image.jpg');
+ * $filter = new Dm_Image_Filter_InstagramLoFi(300,1);
+ + $image->applyFilter($filter);
+ * $image->display();
  * 
- * @version 1.0.0
  * @author demouth.net
  */
-class DmImageFile extends DmImage
+class Dm_Image_File extends Dm_Image
 {
 	
 	/**
@@ -40,8 +40,8 @@ class DmImageFile extends DmImage
 		$imageSize = getimagesize($filePath);
 		$width = $imageSize[0];
 		$height = $imageSize[1];
-		$this->graphics = new DmGraphics($imageResource , $width , $height);
-		$this->textGraphics = new DmTextGraphics($imageResource , $width , $height);
+		$this->graphics = new Dm_Image_Graphic_Shape($imageResource , $width , $height);
+		$this->textGraphics = new Dm_Image_Graphic_Text($imageResource , $width , $height);
 		$this->_imageResource = $imageResource;
 		$this->_width = $width;
 		$this->_height = $height;

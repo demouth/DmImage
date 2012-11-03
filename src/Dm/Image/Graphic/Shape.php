@@ -1,10 +1,6 @@
 <?php
-
-require_once realpath(dirname(__FILE__).'/../../DmColor/').'/DmColor.php';
-require_once dirname(__FILE__).'/IDmGraphics.php';
-
 /**
- * DmGraphics
+ * Dm_Image_Graphic_Shape
  * 画像への図形描画等を行う。
  * 
  * @example
@@ -20,7 +16,7 @@ require_once dirname(__FILE__).'/IDmGraphics.php';
  * 
  * @author demouth.net
  */
-class DmGraphics implements IDmGraphics
+class Dm_Image_Graphic_Shape implements Dm_Image_Graphic_Interface
 {
 	
 	
@@ -62,7 +58,7 @@ class DmGraphics implements IDmGraphics
 	
 	/**
 	 * 
-	 * @var DmColor
+	 * @var Dm_Color
 	 */
 	protected $_lineDmColor;
 	
@@ -74,7 +70,7 @@ class DmGraphics implements IDmGraphics
 	
 	/**
 	 * 
-	 * @var DmColor
+	 * @var Dm_Color
 	 */
 	protected $_fillDmColor;
 	
@@ -146,7 +142,7 @@ class DmGraphics implements IDmGraphics
 	 * 現在の描画位置を (x, y) に移動します。
 	 * @param int X軸(px)
 	 * @param int Y軸(px)
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function moveTo($x,$y)
 	{
@@ -162,7 +158,7 @@ class DmGraphics implements IDmGraphics
 	 * その後で、現在の描画位置は (x, y) に設定されます。
 	 * @param int X軸(px)
 	 * @param int Y軸(px)
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function lineTo($x,$y)
 	{
@@ -193,13 +189,13 @@ class DmGraphics implements IDmGraphics
 	 * 
 	 * @param int 線幅(px)
 	 * @param int 線色 例:0x00FF99
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function lineStyle($thickness , $color=0)
 	{
 		$this->_lineThickness = $thickness;
 		$this->_lineColor = $color;
-		$this->_lineDmColor = DmColor::argb($color);
+		$this->_lineDmColor = Dm_Color::argb($color);
 		
 		imagesetthickness(
 			$this->_imageResource,
@@ -210,8 +206,18 @@ class DmGraphics implements IDmGraphics
 	}
 	
 	
+	/**
+	 * 
+	 * @param int 
+	 * @param int 
+	 * @param int 
+	 * @param int 
+	 * @return Dm_Image_Graphic_Shape
+	 */
 	public function drawRect($x,$y,$width,$height)
 	{
+		$width  += $x;
+		$height += $y;
 		$fillColor = $this->_fillDmColor;
 		$lineColor = $this->_lineDmColor;
 		imagefilledrectangle(
@@ -237,9 +243,14 @@ class DmGraphics implements IDmGraphics
 	 * 
 	 * NOTE: Transparent does not work.
 	 * 
+	 * @param int 
+	 * @param int 
+	 * @param int 
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function drawCircle($x,$y,$radius)
 	{
+		$radius *= 2;
 		$this->drawEllipse($x,$y,$radius,$radius);
 		return $this;
 	}
@@ -248,6 +259,7 @@ class DmGraphics implements IDmGraphics
 	 * 
 	 * NOTE: Transparent does not work.
 	 * 
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function drawPie($x,$y,$width,$height,$startDegree,$endDegree)
 	{
@@ -285,6 +297,7 @@ class DmGraphics implements IDmGraphics
 	 * 
 	 * NOTE: Transparent does not work.
 	 * 
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function drawEllipse($x,$y,$width,$height)
 	{
@@ -317,15 +330,19 @@ class DmGraphics implements IDmGraphics
 	/**
 	 * 
 	 * @param int 色 例:0x00FF99
-	 * @return DmGraphics
+	 * @return Dm_Image_Graphic_Shape
 	 */
 	public function fillStyle($color)
 	{
 		$this->_fillColor = $color;
-		$this->_fillDmColor = DmColor::argb($color);
+		$this->_fillDmColor = Dm_Color::argb($color);
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Dm_Image_Graphic_Shape
+	 */
 	public function beginLineFill()
 	{
 		$this->_polygonPath = array();
@@ -333,6 +350,10 @@ class DmGraphics implements IDmGraphics
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Dm_Image_Graphic_Shape
+	 */
 	public function endLineFill()
 	{
 		

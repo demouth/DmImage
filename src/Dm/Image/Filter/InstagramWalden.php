@@ -1,8 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/DmImageInstagramNormalFilter.php';
-
-class DmImageInstagramWaldenFilter extends DmImageInstagramNormalFilter
+class Dm_Image_Filter_InstagramWalden extends Dm_Image_Filter_InstagramNormal
 {
 	
 	

@@ -1,8 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/DmImageFilter.php';
-
-class DmImageCropFilter extends DmImageFilter
+class Dm_Image_Filter_Crop extends Dm_Image_Filter_Abstract
 {
 	
 	public $width = 0;
@@ -15,7 +13,7 @@ class DmImageCropFilter extends DmImageFilter
 		$this->height = $height;
 	}
 	
-	public function execute(DmImage $image)
+	public function execute(Dm_Image $image)
 	{
 		
 		$w = $this->width;
@@ -27,7 +25,7 @@ class DmImageCropFilter extends DmImageFilter
 		//背景色設定(透過を有効化)
 		imagesavealpha($resampledResource,true);
 //		imagealphablending($imageResource, false);
-		$colorId = DmColor::argb(0)->imagecolorallocatealpha($resampledResource);
+		$colorId = Dm_Color::argb(0)->imagecolorallocatealpha($resampledResource);
 //		imagefilledrectangle($imageResource, 0, 0, $width-1, $height-1, $colorId);
 		imagefill($resampledResource, 0, 0, $colorId);
 		

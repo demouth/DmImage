@@ -1,7 +1,10 @@
 <?php
-
-
-interface IDmGraphics
+/**
+ * Dm_Image_Graphic_Interface
+ * 
+ * @author demouth.net
+ */
+interface Dm_Image_Graphic_Interface
 {
 	
 	/**
