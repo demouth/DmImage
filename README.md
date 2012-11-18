@@ -1,7 +1,7 @@
 #DmImage
 
-[http://demouth.github.com/DmImage/](http://demouth.github.com/DmImage/)
-[http://demouth.hatenablog.com/entry/2012/11/14/075806](http://demouth.hatenablog.com/entry/2012/11/14/075806)
+* [http://demouth.github.com/DmImage/](http://demouth.github.com/DmImage/)
+* [http://demouth.hatenablog.com/entry/2012/11/14/075806](http://demouth.hatenablog.com/entry/2012/11/14/075806)
 
 ###DmImageについて
 * PHPライブラリ
