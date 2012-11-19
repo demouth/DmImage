@@ -4,7 +4,7 @@
 * [http://demouth.hatenablog.com/entry/2012/11/14/075806](http://demouth.hatenablog.com/entry/2012/11/14/075806)
 
 ###DmImageについて
-* PHPライブラリ
+* PHPの画像処理ライブラリ
 * PHP5.0以上で動作
 * GDのラッパー
 * GDモジュールが入っていれば動く
