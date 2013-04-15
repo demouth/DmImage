@@ -39,6 +39,10 @@ h1{
 	<li><a href="sample_filters.php">filterを使った画像のリサイズ</a></li>
 	<li><a href="sample_instagram_filters.php">Instagram風の画像加工フィルタ</a></li>
 	<li><a href="sample_merge.php">2枚の画像を合成</a></li>
+	<li><a href="sample_doraemon.php">ドラえもん</a></li>
+	<li><a href="sample_tree/">Processingのソースを移植</a></li>
+	<li><a href="sample_matrix/">JavaScriptのソースを移植</a></li>
+	<li><a href="sample_node/">アニメーション表現</a></li>
 </ul>
 
 </body>
