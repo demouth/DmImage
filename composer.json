@@ -1,0 +1,22 @@
+{
+    "name": "demouth/dmimage",
+    "type": "library",
+    "description": "",
+    "keywords": [],
+    "homepage": "https://github.com/demouth/DmImage",
+    "version": "2.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "demouth",
+            "homepage": "http://demouth.net/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.0"
+    },
+    "autoload": {
+        "psr-0": { "Dm": "src/" }
+    }
+}
