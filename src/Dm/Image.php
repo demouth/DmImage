@@ -227,8 +227,10 @@ class Dm_Image
 	public function destroy()
 	{
 		imagedestroy($this->_imageResource);
-		$this->graphics->destory();
+		$this->graphics->destroy();
 		$this->graphics = null;
+		$this->textGraphics->destroy();
+		$this->textGraphics = null;
 	}
 	
 	/**
