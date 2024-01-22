@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="google-code-prettify/sons-of-obsidian.css" type="text/css" rel="stylesheet" />
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="google-code-prettify/prettify.js"></script>
+<title>DmImage - PHP製画像処理ライブラリ</title>
+</head>
+<body>
+	<header>
+		<h1>DmImage</h1>
+		<p>github.com/demouth/DmImage</p>
+		<p>version 2.0</p>
+		<p>
+			<a href="https://github.com/demouth/DmImage">github</a>
+			<a href="https://github.com/demouth/DmImage/archive/master.zip">download</a>
+			<a href="http://demouth.net/">@demouth</a>
+		</p>
+		</p>
+			<iframe src="http://ghbtns.com/github-btn.html?user=demouth&repo=DmImage&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+			<br>
+			
+			<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja" data-hashtags="php">ツイート</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			<br>
+			
+			<a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+			<br>
+			
+			<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fdemouth.github.com%2FDmImage%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe>
+			<br>
+			
+			<a href="https://github.com/demouth/DmImage/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+		<p>
+	</header>
+	<div id="contents">
+		
+		
+		<div class="section">
+			
+			<h2>目次</h2>
+			<ul>
+				<li>
+					<a href="#about">DmImageについて</a>
+				</li>
+				<li>
+					<a href="#include">include方法</a>
+				</li>
+				<li>
+					<a href="#howto">使い方</a>
+					<ul>
+						<li><a href="#howto1">使い方1 〜 画像の表示</a></li>
+						<li><a href="#howto2">使い方2 〜 DataSchemeURIを使った表示</a></li>
+						<li><a href="#howto3">使い方3 〜 画像のファイル出力</a></li>
+						<li><a href="#howto4">使い方4 〜 ダウンロードダイアログからの画像ダウンロード</a></li>
+						<li><a href="#howto5">使い方5 〜 背景色指定の一例</a></li>
+						<li><a href="#howto6">使い方6 〜 四角形の描画</a></li>
+						<li><a href="#howto7">使い方7 〜 図形描画時のstyle指定</a></li>
+						<li><a href="#howto8">使い方8 〜 基本図形の描画</a></li>
+						<li><a href="#howto9">使い方9 〜 直線図形の描画</a></li>
+						<li><a href="#howto10">使い方10 〜 テキストの描画</a></li>
+						<li><a href="#howto11">使い方11 〜 filterを使った画像のリサイズ</a></li>
+						<li><a href="#howto12">使い方12 〜 Instagram風の画像加工フィルタ</a></li>
+						<li><a href="#howto13">使い方13 〜 2枚の画像を合成</a></li>
+						<li><a href="#howto14">使い方14 〜 ドラえもん</a></li>
+						<li><a href="#howto15">使い方15 〜 Processingのソースを移植</a></li>
+						<li><a href="#howto16">使い方16 〜 JavaScriptのソースを移植</a></li>
+						<li><a href="#howto17">使い方17 〜 アニメーション表現</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="section" id="about">
+			
+			<h2>DmImageについて</h2>
+			<ul>
+				<li>PHPの画像処理ライブラリ</li>
+				<li>PHP5.0以上で動作</li>
+				<li>GDのラッパー</li>
+				<li>GDモジュールが入っていれば動く</li>
+				<li>
+					対応するフォーマット
+					<ul>
+						<li>jpg(jpeg)</li>
+						<li>png</li>
+						<li>gif</li>
+					</ul>
+				</li>
+				<li>注意点
+					<ul>
+						<li>円の描画の際、線を半透明にするとあまり綺麗に描画されない</li>
+						<li>bmpに対応していない</li>
+					</ul>
+					
+				</li>
+				
+			</ul>
+		</div>
+		
+		<div class="section" id="include">
+			
+			<h2>include方法</h2>
+			PSR-0に準拠していますので、Zendのオートローダー等で自動で読み込めると思います。
+			<br>
+			PHP5.3以下でも使えるようにnamespaceは使用していませんが、SplClassLoaderを使う場合と使わない場合はそれぞれこんな感じです。お好きな方法で読み込んでください。
+			<pre class="prettyprint linenums">
+&lt;?php
+// SplClassLoaderを使用する場合
+require_once 'SplClassLoader.php';
+$DmDirPath = '/path/to/lib/';
+$classLoader = new SplClassLoader(null, $DmDirPath);
+$classLoader->register();
+</pre>
+		
+			<pre class="prettyprint linenums">
+&lt;?php
+// SplClassLoaderを使用せず、1ファイル毎読み込む場合
+$DmDirPath = '/path/to/lib/';
+require_once $DmDirPath.'Dm/Color.php';
+require_once $DmDirPath.'Dm/Image.php';
+require_once $DmDirPath.'Dm/Image/Graphic/Interface.php';
+require_once $DmDirPath.'Dm/Image/Graphic/Text.php';
+require_once $DmDirPath.'Dm/Image/Graphic/Shape.php';
+require_once $DmDirPath.'Dm/Image/File.php';
+require_once $DmDirPath.'Dm/Image/Filter/Abstract.php';
+require_once $DmDirPath.'Dm/Image/Filter/Fit.php';
+require_once $DmDirPath.'Dm/Image/Filter/Crop.php';
+require_once $DmDirPath.'Dm/Image/Filter/InstagramNormal.php';
+require_once $DmDirPath.'Dm/Image/Filter/InstagramLoFi.php';
+require_once $DmDirPath.'Dm/Image/Filter/InstagramWalden.php';
+require_once $DmDirPath.'Dm/Image/Filter/InstagramToaster.php';
+</pre>
+			
+			Composerを利用する場合はcomposer.jsonのrequireに "demouth/dmimage": "dev-master" と書き、updateしておけばrequireしなくても使えます。
+			<br>
+			FuelPHP1.6の場合、composer.jsonのrequireの部分を抜き出すと例として下記のようになります。
+			<pre class="prettyprint linenums">
+    "require": {
+        "php": ">=5.3.3",
+        "monolog/monolog": "1.5.*",
+        "fuelphp/upload": "2.0",
+        "demouth/dmimage": "dev-master"
+    },
+</pre>
+			
+		</div>
+		
+		
+		<div class="section" id="howto">
+			
+			<h2 id="howto1">使い方1 〜 画像の表示</h2>
+			サイズが横400x縦300で、色が0099FFで、透明度がFF（つまり透明ではない）の画像を作成し、出力している例です。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->display();
+exit;
+</pre>
+			<img src="sample_display.png">
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto2">使い方2 〜 DataSchemeURIを使った表示</h2>
+			DataSchemeURIを使った出力にも対応していますので、タグに直接画像を埋め込む事ができます。
+			<br>
+			なお、この機能を使用する際、ライブラリ内のディレクトリに一時ファイルを作成しますのでディレクトリの権限設定にご注意ください。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+	&lt;meta charset="UTF-8" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	
+	DATA SCHEME URIで表示
+	&lt;br&gt;
+	&lt;img src="&lt;?= $image->toDataSchemeURI() ?&gt;"&gt;
+	
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+			このコードで出力すると実際に出力されるimgタグは次のようになっています。
+			<pre class="prettyprint linenums">
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAEs
+CAYAAADtt+XCAAAEPElEQVR4Xu3VMQ3AMBDAwDT8CRTtl0CkqJ7vZu9+1juzAOCn
+fQsA4MRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRA
+AEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDE
+QABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASA
+xEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwE
+gMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgM
+BIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABI
+DASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAA
+SAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRA
+AEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDE
+QABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASA
+xEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwE
+gMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgM
+BIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABI
+DASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAA
+SAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRA
+AEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDE
+QABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASA
+xEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwE
+gMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgM
+BIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABI
+DASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASAxEAA
+SAwEgMRAAEgMBIDEQABIDASAxEAASAwEgMRAAEgMBIDEQABIDASA5AOLiwTvg1Oq
+XwAAAABJRU5ErkJggg=="&gt;
+</pre>
+			<img src="sample_data_scheme_uri.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto3">使い方3 〜 画像のファイル出力</h2>
+			生成したインスタンスは画像ファイルとしても出力可能です。
+			<br>
+			下記の例ではpng画像1枚、jpg画像2枚、gif画像1枚をサーバー上にファイル出力しています。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->textGraphics
+	->setColor(0xFFFFFFFF)
+	->setFontSize(30)
+	->textTo(80, 150, 'Hello world.')
+;
+$image->saveTo('/path/to/dir/saved_image.png');
+$image->saveTo('/path/to/dir/saved_image.jpg');
+$image->saveTo('/path/to/dir/saved_image.jpeg');
+$image->saveTo('/path/to/dir/saved_image.gif');
+</pre>
+			<img src="sample_save_to.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto4">使い方4 〜 ダウンロードダイアログからの画像ダウンロード</h2>
+			下記のコードで画像がブラウザへダウンロードされます。
+			<br>
+			下記の例ではjpg形式で画像クオリティを50/100でブラウザへのダウンロードを行なっています。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->startDownload('download','jpg',50);
+</pre>
+			<img src="sample_start_download.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto5">使い方5 〜 背景色指定の一例</h2>
+			色指定の方法は0xFF001122のような16進数指定以外にも、Dm_Colorクラスを使用すれば色の微調整が可能です。
+			<pre class="prettyprint linenums">
+&lt;?php
+$color = Dm_Color::argb(1, 255, 0, 0); //RGB指定
+$color->v *= 0.5; //明度を半分に（HSV）
+$image = new Dm_Image(400,300, $color->toInt());
+$image->display();
+exit;
+</pre>
+			<img src="sample_color.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto6">使い方6 〜 四角形の描画</h2>
+			XY座標を指定して画像へ四角形を描画します。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->graphics->drawRect(20, 100, 360, 100);
+$image->display();
+exit;
+</pre>
+			<img src="sample_draw_rect.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto7">使い方7 〜 図形描画時のstyle指定</h2>
+			描画前に塗りの色と線の色を指定し、図形描画できます。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->graphics
+	->lineStyle(0,0)
+	->fillStyle(0xFFFFFFFF)
+	->drawRect(70, 40, 200, 150)
+	->lineStyle(10,0x6600FFFF)
+	->fillStyle(0)
+	->drawRect(100, 70, 200, 150)
+	->lineStyle(20,0xFF3300FF)
+	->fillStyle(0x9900AAFF)
+	->drawRect(130, 100, 200, 150)
+;
+$image->display();
+exit;
+</pre>
+			<img src="sample_graphic_style.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto8">使い方8 〜 基本図形の描画</h2>
+			色々な図形を描画できます。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->graphics
+	->lineStyle(1,0xFFFFFFFF)
+	->fillStyle(0xFF66BBFF)
+	->drawRect(10, 10, 190, 140)
+	->drawCircle(100, 225, 50)
+	->drawEllipse(300, 75, 150, 100)
+	->drawPie(300, 225, 150, 100, 0, 135)
+;
+$image->display();
+exit;
+</pre>
+			<img src="sample_basic_shapes.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto9">使い方9 〜 直線図形の描画</h2>
+			直線を使って複雑な図形の描画も可能です。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->graphics
+	->lineStyle(1,0xFFFFFFFF)
+	->fillStyle(0x99001199)
+	->beginLineFill()
+	->moveTo(200, 10)
+	->lineTo(230, 100)
+	->lineTo(340, 100)
+	->lineTo(250, 160)
+	->lineTo(300, 290)
+	->lineTo(200, 190)
+	->lineTo(100, 290)
+	->lineTo(150, 160)
+	->lineTo(60,  100)
+	->lineTo(170, 100)
+	->lineTo(200, 10)
+	->endLineFill()
+;
+$image->display();
+exit;
+</pre>
+			<img src="sample_line_to.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto10">使い方10 〜 テキストの描画</h2>
+			文字の描画もできます。
+			<br>
+			GDでテキストを描画するのは面倒ですが、ライブラリ内にフォントが組み込んでいることで簡単に描画できます。
+			<pre class="prettyprint linenums">
+&lt;?php
+$image = new Dm_Image(400,300, 0xFF0099FF);
+$image->textGraphics
+	//->setFontFile('path/to/fontfile.ttf') //フォント指定したい場合
+	->setColor(0xFFFFFFFF)
+	->setFontSize(30)
+	->textTo(70, 230, 'Hello world.',45)
+	->setColor(0xFF000000)
+	->textTo(244, 210, '日本語。',45)
+	->setColor(0xFFFFFFFF)
+	->textTo(240, 210, '日本語。',45)
+;
+$image->display();
+exit;
+</pre>
+			<img src="sample_text_to.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto11">使い方11 〜 filterを使った画像のリサイズ</h2>
+			filter機能を使うと画像の加工も簡単にできます。
+			<br>
+			デフォルトで画像のリサイズや切り抜きを行うクラスが用意されています。
+			<br>
+			下記の例では2つのfilterを組み合わせ、200x200に収まるサイズに画像をリサイズしています。
+			<pre class="prettyprint linenums">
+&lt;?php
+$originalImagePath = './horse.jpeg';
+$width = 200;
+$height = 200;
+$fitFilter = new Dm_Image_Filter_Fit($width,$height,true);
+$cropFilter = new Dm_Image_Filter_Crop($width,$height);
+
+$image = new Dm_Image_File($originalImagePath);
+$image-&gt;applyFilters(array(
+		$fitFilter,
+		$cropFilter
+	));
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+	&lt;meta charset="UTF-8" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div&gt;
+		元画像&lt;br&gt;
+		&lt;img src="&lt;?=$originalImagePath?&gt;"&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		Filter適用後（縦&lt;?=$width?&gt; x 横&lt;?=$height?&gt; に収まるようにリサイズ）&lt;br&gt;
+		&lt;img src="&lt;?=$image-&gt;toDataSchemeURI()?&gt;" /&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+			<img src="sample_filters.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto12">使い方12 〜 Instagram風の画像加工フィルタ</h2>
+			Instagramっぽく画像を加工するクラスが3つ用意されています。
+			<br>
+			色の加工とフレームの組み合わせは変更可能です。
+			<pre class="prettyprint linenums">
+&lt;?php
+$originalImagePath = './horse.jpeg';
+$filter1 = new Dm_Image_Filter_InstagramLoFi(300,1);
+$filter2 = new Dm_Image_Filter_InstagramWalden(300,2);
+$filter3 = new Dm_Image_Filter_InstagramToaster(300);
+
+$image1 = new Dm_Image_File($originalImagePath);
+$image1-&gt;applyFilter($filter1);
+$image2 = new Dm_Image_File($originalImagePath);
+$image2-&gt;applyFilter($filter2);
+$image3 = new Dm_Image_File($originalImagePath);
+$image3-&gt;applyFilter($filter3);
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+	&lt;meta charset="UTF-8" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div&gt;
+		元画像&lt;br&gt;
+		&lt;img src="&lt;?=$originalImagePath?&gt;"&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		Instagram風Filter適用後&lt;br&gt;
+		&lt;img src="&lt;?=$image1-&gt;toDataSchemeURI()?&gt;" /&gt;
+		&lt;img src="&lt;?=$image2-&gt;toDataSchemeURI()?&gt;" /&gt;
+		&lt;img src="&lt;?=$image3-&gt;toDataSchemeURI()?&gt;" /&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+			<img src="sample_instagram_filters.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto13">使い方13 〜 2枚の画像を合成</h2>
+			2枚の画像を合成できます。
+			<br>
+			下記の例では写真の上に半透明のロゴ画像を合成しています。
+			<pre class="prettyprint linenums">
+&lt;?php
+$filter = new Dm_Image_Filter_Fit(400,400);
+$image = new Dm_Image_File(dirname(__FILE__).'/horse.jpeg');
+$image->applyFilter($filter);
+
+$logoImage = new Dm_Image_File(dirname(__FILE__).'/php.gif');
+$image->draw($logoImage,20,20);
+
+$image->display();
+exit;
+</pre>
+			<img src="sample_merge.png">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto14">使い方14 〜 ドラえもん</h2>
+			描画メソッドを組み合わせるとドラえもんも描けます。
+			<br>
+			フォントはドラえもんフォントを使っています。
+			<pre class="prettyprint linenums">
+&lt;?php
+
+$colorBody = 0xFF0099FF;
+$colorLine = 0xFF003399;
+$colorWhite = 0xFFFFFFFF;
+$colorEye  = 0xFF000000;
+$colorRed  = 0xFFFF0000;
+$colorYellow = 0xFFFFFF00;
+$thickness = 3;
+$image = new Dm_Image(500,600,0xFFFFFFFF);
+$image->graphics
+	
+	//体
+	->fillStyle($colorBody)
+	->lineStyle($thickness,$colorLine)
+	->beginLineFill()
+	->moveTo(260, 440)
+	->lineTo(260, 450)
+	->lineTo(360, 450)
+	->lineTo(360, 370)
+	->lineTo(400, 410)
+	->lineTo(440, 370)
+	->lineTo(360, 290)
+	->lineTo(140, 290)
+	->lineTo(60 , 370)
+	->lineTo(100, 410)
+	->lineTo(140, 370)
+	->lineTo(140, 450)
+	->lineTo(240, 450)
+	->lineTo(240, 440)
+	->endLineFill()
+	
+	//手
+	->fillStyle($colorWhite)
+	->drawCircle(410, 380, 35)
+	->drawCircle(90 , 380, 35)
+	
+	//ポケット
+	->drawCircle(250, 330, 85)
+	->drawPie(250, 350, 120, 100, 0, 180)
+	->moveTo(190, 350)
+	->lineTo(310, 350)
+	
+	//足
+	->drawRect(260, 450, 100, 29)
+	->drawPie(359, 465, 20, 30, -90, 90)
+	->drawPie(262, 465, 20, 30, 90, -90)
+	->drawRect(140, 450, 100, 29)
+	->drawPie(239, 465, 20, 30, -90, 90)
+	->drawPie(142, 465, 20, 30, 90, -90)
+	
+	//頭
+	->fillStyle($colorBody)
+	->drawEllipse(250, 150, 350, 280)
+	->fillStyle($colorWhite)
+	->drawEllipse(250, 190, 280, 190)
+	
+	//目
+	->drawEllipse(290, 100, 80, 90)
+	->drawEllipse(210, 100, 80, 90)
+	->fillStyle($colorEye)
+	->drawCircle(270, 110, 10)
+	->drawCircle(230, 110, 10)
+	
+	//鼻・口・ひげ
+	->fillStyle($colorRed)
+	->drawCircle(250, 140, 15)
+	->lineStyle(0)
+	->fillStyle($colorWhite)
+	->drawCircle(255, 135, 5)
+	->lineStyle($thickness,$colorLine)
+	->moveTo(250, 153)
+	->lineTo(250, 250)
+	->fillStyle(0)
+	->drawPie(250, 200, 160, 100, 15, 165)
+	->moveTo(300, 170)
+	->lineTo(350, 150)
+	->moveTo(300, 180)
+	->lineTo(350, 180)
+	->moveTo(300, 190)
+	->lineTo(350, 210)
+	->moveTo(200, 170)
+	->lineTo(150, 150)
+	->moveTo(200, 180)
+	->lineTo(150, 180)
+	->moveTo(200, 190)
+	->lineTo(150, 210)
+	
+	//首輪
+	->fillStyle($colorRed)
+	->drawRect(141, 260, 222, 30)
+	->drawPie(360, 275, 20, 30, -90,  90)
+	->drawPie(142, 275, 20, 30,  90, -90)
+	
+	//鈴
+	->fillStyle($colorYellow)
+	->drawCircle(250, 290, 20)
+	->moveTo(232, 280)
+	->lineTo(268, 280)
+	->moveTo(230, 285)
+	->lineTo(270, 285)
+	->moveTo(250, 300)
+	->lineTo(250, 310)
+	->drawCircle(250, 298, 5)
+;
+$image->textGraphics
+	->setFontSize(70)
+	->setFontFile('font/doraemoji/doraemoji.ttf') //フォント
+	->setColor($colorLine)
+	->textTo(20, 580, 'ドラえもん')
+;
+
+$image->display();
+exit;
+</pre>
+			<img src="sample_doraemon.png">
+			
+		</div>
+		
+		<div class="section">
+			
+			<h2 id="howto15">使い方15 〜 Processingのソースを移植</h2>
+			
+			Processingのソースを移植しました。
+			<br>
+			<a href="http://processing.org/learning/topics/tree.html">http://processing.org/learning/topics/tree.html</a>
+			
+			<pre class="prettyprint linenums">
+&lt;?php
+define('WIDTH', 640);
+define('HEIGHT', 360);
+
+$theta = rand(1,20)*0.1;
+$image = new Dm_Image(WIDTH,HEIGHT,0xFF000000);
+draw();
+$image->display();
+
+function draw()
+{
+	global $image;
+	
+	$image->graphics
+		->lineStyle(1,0xFFFFFFFF)
+		->moveTo(WIDTH/2, HEIGHT)
+		->lineTo(WIDTH/2, HEIGHT-120);
+	$h = 120;
+	branch($h,-M_PI/2,WIDTH/2,HEIGHT-120);
+}
+function branch($h,$rotate,$x,$y)
+{
+	global $image,$theta;
+	if($h<2)return;
+	
+	$h *= 0.66;
+	
+	$movedX = cos($rotate+$theta)*$h + $x;
+	$movedY = sin($rotate+$theta)*$h + $y;
+	$image->graphics
+		->moveTo($x, $y)
+		->lineTo($movedX, $movedY);
+	branch($h,$rotate+$theta,$movedX,$movedY);
+	
+	$movedX = cos($rotate-$theta)*$h + $x;
+	$movedY = sin($rotate-$theta)*$h + $y;
+	$image->graphics
+		->moveTo($x, $y)
+		->lineTo($movedX, $movedY);
+	branch($h,$rotate-$theta,$movedX,$movedY);
+}
+</pre>
+			<img src="sample_tree.png">
+			<br>
+			下記の例では複数の静止画を出力し、アニメーションgifとして結合しています。
+			<br>
+			<img src="sample_tree_animate.gif">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto16">使い方16 〜 JavaScriptのソースを移植</h2>
+			
+			JavaScriptのソースを移植しました。
+			<br>
+			<a href="http://cssdeck.com/labs/the-matrix">http://cssdeck.com/labs/the-matrix</a>
+			
+			<pre class="prettyprint linenums">
+&lt;?php
+define('W', 640);
+define('H', 360);
+define('FONT_SIZE', 11);
+define('FRAME', 200);
+
+$STR = array('感','憂','位','中','上','医','受','柄','下','嫁','木','区','毛','弧');
+$letters = array_fill(0,((int)W/FONT_SIZE),0);
+$image = new Dm_Image(W,H,0xFF000000);
+$graphics = $image->graphics;
+$textGraphics = $image->textGraphics;
+$graphics->fillStyle(0x22000000);
+for($i=0;$i&lt;FRAME;$i++) draw();
+$image->display();
+
+function draw()
+{
+	global $STR,$letters,$graphics,$textGraphics;
+	
+	$graphics->drawRect(0, 0, W, H);
+	$l = count($letters);
+	for($i=0;$i&lt;$l;$i++){
+		$str = $STR[rand(0,count($STR)-1)];
+		$y = $letters[$i];
+		$textGraphics
+			->setColor(0xFF00FF00)
+			->setFontSize(FONT_SIZE-3)
+			->textTo($i*FONT_SIZE, $y, $str);
+		$letters[$i] = ($y > H + rand(0,1e3)) ? 0 : $y+FONT_SIZE;
+	}
+}
+</pre>
+			<img src="sample_matrix.png">
+			<br>
+			下記の例では複数の静止画を出力し、アニメーションgifとして結合しています。
+			<br>
+			<img src="sample_matrix_animate.gif">
+			
+		</div>
+		
+		
+		<div class="section">
+			
+			<h2 id="howto17">使い方17 〜 アニメーション表現</h2>
+			
+			Flashのようなアニメーション表現も可能です。
+			
+			<pre class="prettyprint linenums">
+&lt;?php
+define('W', 640);
+define('H', 360);
+define('C', 200);
+define('D', 50);
+
+$image = new Dm_Image(W,H,0xFF000000);
+$graphics = $image->graphics;
+$graphics
+	->lineStyle(0)
+	->fillStyle(0x66FFFFFF);
+
+$nodeList = array();
+for ($i=0; $i < C; $i++) { 
+	$nodeList[] = array(
+		rand(-20,W+20),
+		rand(-20,H+20),
+		0
+	);
+}
+
+for ($i=0; $i < C; $i++) {
+	$node = &$nodeList[$i];
+	
+	for ($j=$i; $j < C; $j++) {
+		if($i==$j)continue;
+		$nNode = &$nodeList[$j];
+		$x = $node[0] - $nNode[0];
+		$y = $node[1] - $nNode[1];
+		$diff = sqrt($x*$x+$y*$y);
+		if($diff < D){
+			$node[2] += 1;
+			$nNode[2] += 1;
+			$graphics
+				->lineStyle(
+					min(10*(D-$diff)/D,4),
+					Dm_Color::argb((D-$diff)/D*0.6+0.2,255,255,255)->toInt()
+				)
+				->moveTo($node[0], $node[1])
+				->lineTo($nNode[0], $nNode[1])
+			;
+		}
+	}
+}
+
+$graphics->lineStyle(0,0x11FFFFFF);
+for ($i=0; $i < C; $i++) {
+	$node = $nodeList[$i];
+	$graphics->drawCircle($node[0], $node[1], 2+$node[2]*$node[2]*0.3);
+}
+
+$image->display();
+</pre>
+			<img src="sample_node.png">
+			<br>
+			下記の例では複数の静止画を出力し、アニメーションgifとして結合しています。
+			<br>
+			<img src="sample_node_animate.gif">
+			
+		</div>
+		
+	</div>
+	
+	
+	<script>prettyPrint();</script>
+</body>
+</html>

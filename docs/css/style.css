@@ -1,0 +1,48 @@
+*{
+	font-family:Arial, Helvetica, osaka, meiryo, sans-serif;
+}
+pre{
+	border-radius:5px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+pre,pre *{
+	line-height: 1.4em;
+	font-size:12px;
+	font-family:"Menlo", "Courier", monospace;
+}
+body{
+	padding:40px;
+	max-width:1100px;
+	margin:0px auto 0px;
+}
+h1,h2,h3{
+	padding:0em;
+	margin:0em 0em 0.5em;
+	letter-spacing:0.2em;
+}
+h1{
+	font-size:36px;
+}
+h2{
+	font-size:20px;
+}
+header a,header p{
+	font-size:12px;
+	padding:0px;
+	margin:0px 10px 0px 0px;
+}
+header h1{
+	padding:0px;
+	margin:0px;
+}
+header{
+	margin-bottom:80px;
+}
+#contents{
+	padding:0px;
+}
+.section{
+	padding-bottom:80px;
+	font-size:13px;
+}
